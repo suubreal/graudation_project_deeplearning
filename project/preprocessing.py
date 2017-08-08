@@ -7,12 +7,12 @@ Created on Tue Aug  8 21:31:28 2017
 
 import os
 
-folder='dataset/images/pushup'
+folder='dataset/images/pushup_1'
 if not os.path.exists(folder):
     os.makedirs(folder)
 
 import cv2
-vidcap = cv2.VideoCapture('example.avi')
+vidcap = cv2.VideoCapture('dataset/video/example.avi')
 count = 0
 
 while True :
