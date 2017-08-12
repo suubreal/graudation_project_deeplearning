@@ -12,18 +12,35 @@ Created on Sun Aug  6 15:10:47 2017
 @author: USER
 """
 # import tensorflow
-import tensorflow as tf          
+import os
+import tensorflow as tf       
+import matplotlib.image as mpimg   
+
+
+def new_weights(shape):
+    return tf.Variable(tf.truncated_normal(shape, stddev=0.05))
+
+def new_biases(length):
+    return tf.Variable(tf.constant(0.05, shape=[length]))
 
 
 
 ###########################################################################
 # initialize dataset
-# need video processing 
-from tensorflow.examples.tutorials.mnist import input_data                              
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)            
+# need video processing                                       
 
-X = tf.placeholder(tf.float32, [None, 76800]) # 320 * 240 = 76800 
-#Y1 = tf.placeholder(tf.float32, [None, 3]) # 3 output - need to be modified                    
+
+
+filename = os.path.dirname("dataset/images/pushup/") + "/frame1.jpg";
+image = mpimg.imread(filename) 
+height, width, depth = image.shape 
+
+training_shape = [width , height] 
+
+
+
+X = tf.placeholder(tf.float32, [None, width * height]) # 320 * 240 = 76800 
+Y1 = tf.placeholder(tf.float32, [None, 3]) # 3 output - need to be modified                    
 
 ###########################################################################
 
@@ -39,8 +56,8 @@ X = tf.placeholder(tf.float32, [None, 76800]) # 320 * 240 = 76800
 # initialize bias
 
 #layer 1
-W1 = tf.Variable()
-B1 = tf.Variable()
+W1 = tf.Variable(tf.truncated_normal(training_shape, stddev=0.05))
+B1 = tf.Variable(tf.truncated_normal(training_shape, stddev=0.05))
 
 #Layer 2
 #W2 = tf.Variable()
@@ -85,7 +102,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 for i in range(1000):                           
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
-        batch_xs, batch_ys = mnist.train.next_batch(100)
+        batch_xs, batch_ys = re
         sess.run(train_step, feed_dict={x: batch_xs, y: batch_ys})
         print(sess.run(accuracy, feed_dict={x: mnist.test.images, y: mnist.test.labels}))  
 
